@@ -1,0 +1,5 @@
+.header { height:120px; background-color:grey; }
+
+.split { width:48%; background-color:orange; }
+.left { float:left; border-right:5px solid black; }
+.right { float:right; }
