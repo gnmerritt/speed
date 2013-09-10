@@ -11,27 +11,64 @@ function getFollowerUrl(url) {
     return url.replace(re, replacement);
 };
 
-function sync( leaderUrl ) {
-    var followUrl = getFollowerUrl( leaderUrl )
-    , followerS
+/**
+ * Loads the leader iframe from the inputted Url
+ */
+function loadFromInput() {
+    var suffix = $("#setUrl").val()
+    , url;
+    if ( suffix.indexOf("/") == 0 ) {
+        url = suffix;
+    }
+    else {
+        url = "http://" + suffix;
+    }
+    time("#leader", url);
+};
+
+/**
+ * Update the follower pane to match the leader
+ */
+function sync(leaderUrl) {
+    var followUrl = getFollowerUrl(leaderUrl)
     ;
-    $("#follower").attr("src", followUrl);
+    time("#follower", followUrl);
+};
+
+/**
+ * Time the load time of a pane and report it to the DOM
+ */
+function time(selector, url) {
+    var ele = $(selector)
+    , iframeId = ele.attr("id")
+    , timeEle = $(".timer[data-for='" + iframeId + "']")
+    , start = new Date().getTime()
+    , loadFunc = function(e) {
+        var loadTime = new Date().getTime() - start
+        ;
+        timeEle.html("Loaded in " + loadTime + " ms");
+        timeEle.removeClass("loading");
+    }
+    ;
+    ele.one("load", loadFunc);
+    timeEle.addClass("loading");
+    ele.attr("src", url);
 };
 
 return {
     init:function() {
         $("#leader").load(function(e) {
             var url = e.target.contentWindow.location.href;
-            sync( url );
+            sync(url);
         });
         $("input").not("#setUrl").change(function() {
-            sync( $("#leader").attr("src") );
+            sync($("#leader").attr("src"));
         });
-        $("#setUrl").change(function() {
-            var url = "http://" + $(this).val();
-            $("#leader").attr( "src", url );
-            sync( url );
-        });
+        $("#setUrl").change(loadFromInput);
+        $("#reload").click(loadFromInput);
+
+        // and kick off the first load
+        loadFromInput();
     }
 };
 

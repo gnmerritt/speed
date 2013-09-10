@@ -12,29 +12,31 @@
     <div class="split">
       <div class="url">
         <label for="setUrl">Left side Url: http://</label>
-        <input id="setUrl" name="leaderUrl" type="text" tabindex="100"/>
+        <input id="setUrl" name="leaderUrl" type="text" tabindex="100" value="/empty"/>
       </div>
 
       <div>
         <label for="leaderMatch">Right side replace: s/</label>
-        <input name="leaderMatch" type="text" value="300" tabindex="200"/>
+        <input name="leaderMatch" type="text" tabindex="200"/>
 
         <label for="followReplace">/</label>
-        <input name="followReplace" type="text" value="500" tabindex="300"/>
+        <input name="followReplace" type="text" tabindex="300"/>
       </div>
     </div>
 
-    <div class="split" style="background-color:purple; height:40px;"></div>
+    <div class="split">
+      <input id="reload" type="submit" value="Reload both"/>
+    </div>
   </div>
 
   <div class="timingBar">
-    <div class="split" style="background-color:red;"></div>
-    <div class="split" style="background-color:green;"></div>
+    <div class="split timer loading" data-for="leader"></div>
+    <div class="split timer loading" data-for="follower"></div>
   </div>
 </div>
 
 <div class="ifHolder">
-  <iframe id="leader" class="split left" src="/empty"></iframe>
+  <iframe id="leader" class="split left"></iframe>
   <iframe id="follower" class="split right"></iframe>
 </div>
 
