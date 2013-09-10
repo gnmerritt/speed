@@ -1,20 +1,23 @@
 <!doctype html>
 <head>
 <script type="text/javascript" src="/static/jquery-2.0.3.min.js"></script>
-<script type="text/javascript" src="static/splitter.js"></script>
-<link rel="stylesheet" type="text/css" href="/static/style.css"/>
+<script type="text/javascript" src="/static/splitter.js"></script>
+<link rel="stylesheet/less" type="text/css" href="/static/style.less"/>
+<script type="text/javascript" src="/static/less-1.4.1.min.js"></script>
 </head>
 <body>
 
 <div class="header">
 </div>
 
-<iframe class="split left"></iframe>
-<iframe class="split right"></iframe>
+<div class="ifHolder">
+  <iframe id="leader" class="split left" src="http://tripadvisor.com"></iframe>
+  <iframe id="follower" class="split right"></iframe>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function() {
-    ss.init();
+  ss.init();
   });
 </script>
 
