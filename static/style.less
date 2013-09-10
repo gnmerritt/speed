@@ -1,5 +1,11 @@
-.header { height:120px; background-color:grey; }
+@controls-height:120px;
 
-.split { width:48%; background-color:orange; }
-.left { float:left; border-right:5px solid black; }
-.right { float:right; }
+.header { height:@controls-height; background-color:grey; }
+
+.ifHolder {
+  position:absolute; top:0; bottom:0;
+  margin-top:@controls-height + 10px;
+  width:100%;
+
+  .split { margin-left:1%; width:48%; height:100%; float:left; }
+}

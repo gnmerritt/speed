@@ -1,12 +1,17 @@
 /**
- *
+ * Javascript based page load performance comparator
  */
 ss = function(document, window, undefined) {
 
+function leaderChange(e) {
+    var url = e.target.contentWindow.location.href;
+    $("#follower").attr('src', url);
+};
+
 return {
     init:function() {
-        console.log("JS init")
+        $("#leader").load(leaderChange);
     }
-}
+};
 
 }(document, window, undefined);
