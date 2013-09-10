@@ -1,11 +1,30 @@
 @controls-height:120px;
+@controls-padding:10px;
 
-.header { height:@controls-height; background-color:grey; }
+.border-radius(@px:5px) {
+    -moz-border-radius:@px;
+    -webkit-border-radius:@px;
+    border-radius:@px;
+}
+
+.header {
+  height:@controls-height; padding:@controls-padding;
+  .border-radius();
+  background-color:#ddd;
+}
 
 .ifHolder {
   position:absolute; top:0; bottom:0;
-  margin-top:@controls-height + 10px;
+  margin-top:@controls-height + 3*@controls-padding;
   width:100%;
+}
 
-  .split { margin-left:1%; width:48%; height:100%; float:left; }
+.split {
+    margin-left:1%; width:48%; height:100%;
+    float:left;
+}
+
+.timingBar {
+    clear:both;
+    .split { height:80px; }
 }

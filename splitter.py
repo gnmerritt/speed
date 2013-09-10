@@ -13,5 +13,9 @@ def delay(ms):
     return render_template("delay.html", time=ms,
                            url=url_for("delay", ms=ms))
 
+@app.route("/empty")
+def empty():
+    return "Add a left-side url to start timing"
+
 if __name__ == "__main__":
     app.run(debug=True)
