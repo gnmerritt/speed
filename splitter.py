@@ -4,8 +4,15 @@ from flask import Flask, render_template, url_for
 app = Flask(__name__)
 
 @app.route("/")
-def splitter():
-    return render_template("splitter.html")
+@app.route("/split")
+@app.route("/split/<initial>")
+@app.route("/split/<initial>/s/<subst>/<replacement>")
+def splitter(initial="/empty", subst="", replacement=""):
+    return render_template("splitter.html", **{
+        'initial':initial,
+        'subst':subst,
+        'replacement':replacement,
+    })
 
 @app.route("/delay/<int:ms>")
 def delay(ms):

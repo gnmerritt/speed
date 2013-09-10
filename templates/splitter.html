@@ -12,15 +12,15 @@
     <div class="split">
       <div class="url">
         <label for="setUrl">Left side Url: http://</label>
-        <input id="setUrl" name="leaderUrl" type="text" tabindex="100" value="/empty"/>
+        <input id="setUrl" name="leaderUrl" type="text" tabindex="100" value="{{ initial }}"/>
       </div>
 
       <div>
         <label for="leaderMatch">Right side replace: s/</label>
-        <input name="leaderMatch" type="text" tabindex="200"/>
+        <input name="leaderMatch" type="text" tabindex="200" value="{{ subst }}"/>
 
         <label for="followReplace">/</label>
-        <input name="followReplace" type="text" tabindex="300"/>
+        <input name="followReplace" type="text" tabindex="300" value="{{ replacement}}"/>
       </div>
     </div>
 
