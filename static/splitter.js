@@ -59,31 +59,41 @@ function time(selector, url) {
         ;
         hud(hudEle, iframeUrl, loadTime);
         hudEle.removeClass("loading");
+        ele.data("timed", false);
     }
     ;
+    ele.data("timed", true);
     ele.one("load", loadFunc);
     hudEle.addClass("loading");
     ele.attr("src", url);
 };
 
 function hud(ele, url, time) {
-    debugger;
     if (url) {
         ele.find(".url").html("At URL: " + url);
     }
-    if (time) {
-        ele.find(".time").html("Loaded in " + time + " ms");
+    if (!time) {
+        time = "UNKNOWN";
     }
+    ele.find(".time").html("Loaded in " + time + " ms");
 }
 
 return {
     init:function() {
         $("#leader").load(function(e) {
-            var url = urlFromIframe(e.target)
+            var leader = $(e.target)
+            , url = urlFromIframe(leader)
             , hudEle = $(".timer[data-for='leader']")
             ;
-            sync(url);
-            hud(hudEle, url, null);
+            // if this was a timed load, update the follower
+            if (leader.data("timed")) {
+                sync(url);
+            }
+            // No way to catch the time when a user clicked a link
+            // to cause the load, so reload the page to time it
+            else {
+                refreshIframes();
+            }
         });
         $("input").not("#setUrl").change(function() {
             sync($("#leader").attr("src"));
