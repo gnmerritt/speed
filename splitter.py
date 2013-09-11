@@ -14,11 +14,16 @@ def splitter(initial="/empty", subst="", replacement=""):
         'replacement':replacement,
     })
 
+@app.route("/delay")
 @app.route("/delay/<int:ms>")
-def delay(ms):
+def delay(ms=200):
     time.sleep(0.001*ms)
-    return render_template("delay.html", time=ms,
-                           url=url_for("delay", ms=ms))
+    return render_template("delay.html", **{
+        'time':ms,
+        'url':url_for("delay", ms=ms),
+        'slower':url_for("delay", ms=ms + 200),
+        'faster':url_for("delay", ms=max(0, ms - 200)),
+    })
 
 @app.route("/empty")
 def empty():

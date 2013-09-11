@@ -11,6 +11,10 @@ function getFollowerUrl(url) {
     return url.replace(re, replacement);
 };
 
+function urlFromIframe( iframe ) {
+    return $(iframe)[0].contentWindow.location.href;
+}
+
 /**
  * Loads the leader iframe from the inputted Url
  */
@@ -25,6 +29,12 @@ function loadFromInput() {
     }
     time("#leader", url);
 };
+
+function refreshIframes() {
+    var url = urlFromIframe($("#leader"));
+    time("#leader", url);
+    sync(url);
+}
 
 /**
  * Update the follower pane to match the leader
@@ -41,31 +51,55 @@ function sync(leaderUrl) {
 function time(selector, url) {
     var ele = $(selector)
     , iframeId = ele.attr("id")
-    , timeEle = $(".timer[data-for='" + iframeId + "']")
+    , hudEle = $(".timer[data-for='" + iframeId + "']")
     , start = new Date().getTime()
     , loadFunc = function(e) {
         var loadTime = new Date().getTime() - start
+        , iframeUrl = urlFromIframe(ele)
         ;
-        timeEle.html("Loaded in " + loadTime + " ms");
-        timeEle.removeClass("loading");
+        hud(hudEle, iframeUrl, loadTime);
+        hudEle.removeClass("loading");
+        ele.data("timed", false);
     }
     ;
+    ele.data("timed", true);
     ele.one("load", loadFunc);
-    timeEle.addClass("loading");
+    hudEle.addClass("loading");
     ele.attr("src", url);
 };
+
+function hud(ele, url, time) {
+    if (url) {
+        ele.find(".url").html("At URL: " + url);
+    }
+    if (!time) {
+        time = "UNKNOWN";
+    }
+    ele.find(".time").html("Loaded in " + time + " ms");
+}
 
 return {
     init:function() {
         $("#leader").load(function(e) {
-            var url = e.target.contentWindow.location.href;
-            sync(url);
+            var leader = $(e.target)
+            , url = urlFromIframe(leader)
+            , hudEle = $(".timer[data-for='leader']")
+            ;
+            // if this was a timed load, update the follower
+            if (leader.data("timed")) {
+                sync(url);
+            }
+            // No way to catch the time when a user clicked a link
+            // to cause the load, so reload the page to time it
+            else {
+                refreshIframes();
+            }
         });
         $("input").not("#setUrl").change(function() {
             sync($("#leader").attr("src"));
         });
         $("#setUrl").change(loadFromInput);
-        $("#reload").click(loadFromInput);
+        $("#reload").click(refreshIframes);
 
         // and kick off the first load
         loadFromInput();
