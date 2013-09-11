@@ -11,6 +11,10 @@ function getFollowerUrl(url) {
     return url.replace(re, replacement);
 };
 
+function urlFromIframe( iframe ) {
+    return $(iframe)[0].contentWindow.location.href;
+}
+
 /**
  * Loads the leader iframe from the inputted Url
  */
@@ -27,7 +31,7 @@ function loadFromInput() {
 };
 
 function refreshIframes() {
-    var url = $("#leader").attr("src");
+    var url = urlFromIframe($("#leader"));
     time("#leader", url);
     sync(url);
 }
@@ -47,26 +51,39 @@ function sync(leaderUrl) {
 function time(selector, url) {
     var ele = $(selector)
     , iframeId = ele.attr("id")
-    , timeEle = $(".timer[data-for='" + iframeId + "']")
+    , hudEle = $(".timer[data-for='" + iframeId + "']")
     , start = new Date().getTime()
     , loadFunc = function(e) {
         var loadTime = new Date().getTime() - start
+        , iframeUrl = urlFromIframe(ele)
         ;
-        timeEle.find(".time").html("Loaded in " + loadTime + " ms");
-        timeEle.find(".url").html("At URL: " + ele.attr("src"));
-        timeEle.removeClass("loading");
+        hud(hudEle, iframeUrl, loadTime);
+        hudEle.removeClass("loading");
     }
     ;
     ele.one("load", loadFunc);
-    timeEle.addClass("loading");
+    hudEle.addClass("loading");
     ele.attr("src", url);
 };
+
+function hud(ele, url, time) {
+    debugger;
+    if (url) {
+        ele.find(".url").html("At URL: " + url);
+    }
+    if (time) {
+        ele.find(".time").html("Loaded in " + time + " ms");
+    }
+}
 
 return {
     init:function() {
         $("#leader").load(function(e) {
-            var url = e.target.contentWindow.location.href;
+            var url = urlFromIframe(e.target)
+            , hudEle = $(".timer[data-for='leader']")
+            ;
             sync(url);
+            hud(hudEle, url, null);
         });
         $("input").not("#setUrl").change(function() {
             sync($("#leader").attr("src"));
