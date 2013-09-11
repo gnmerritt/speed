@@ -26,6 +26,12 @@ function loadFromInput() {
     time("#leader", url);
 };
 
+function refreshIframes() {
+    var url = $("#leader").attr("src");
+    time("#leader", url);
+    sync(url);
+}
+
 /**
  * Update the follower pane to match the leader
  */
@@ -46,7 +52,8 @@ function time(selector, url) {
     , loadFunc = function(e) {
         var loadTime = new Date().getTime() - start
         ;
-        timeEle.html("Loaded in " + loadTime + " ms");
+        timeEle.find(".time").html("Loaded in " + loadTime + " ms");
+        timeEle.find(".url").html("At URL: " + ele.attr("src"));
         timeEle.removeClass("loading");
     }
     ;
@@ -65,7 +72,7 @@ return {
             sync($("#leader").attr("src"));
         });
         $("#setUrl").change(loadFromInput);
-        $("#reload").click(loadFromInput);
+        $("#reload").click(refreshIframes);
 
         // and kick off the first load
         loadFromInput();
