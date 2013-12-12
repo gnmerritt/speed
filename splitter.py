@@ -29,5 +29,14 @@ def delay(ms=200):
 def empty():
     return "Add a left-side url to start timing"
 
+@app.route("/sameorigin")
+def sameorigin():
+    return "<br>".join([
+        "Looks like your browser is enforcing the same-origin policy (this is normal).",
+        "Follow the steps at one of the following links to disable it (dev only!)",
+        '<a target="_" href="http://stackoverflow.com/questions/3102819/chrome-disable-same-origin-policy">Fix for Chrome</a>',
+        '<a target="_" href="https://addons.mozilla.org/en-US/firefox/addon/forcecors/">Firefox plugin</a>',
+      ])
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5002, host='0.0.0.0')

@@ -12,7 +12,11 @@ function getFollowerUrl(url) {
 };
 
 function urlFromIframe( iframe ) {
-    return $(iframe)[0].contentWindow.location.href;
+    try {
+      return $(iframe)[0].contentWindow.location.href;
+    } catch (e) {
+	return "/sameorigin";
+    }
 }
 
 /**
